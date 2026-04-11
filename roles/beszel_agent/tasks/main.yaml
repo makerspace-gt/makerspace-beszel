@@ -1,0 +1,28 @@
+---
+- name: Validate hub key is set
+  ansible.builtin.assert:
+    that:
+      - beszel_hub_key is defined
+      - beszel_hub_key != "CHANGEME"
+      - beszel_hub_key | length > 0
+    fail_msg: >-
+      beszel_hub_key is not set. Deploy the hub first, copy the KEY from
+      the "Add System" dialog, and set it in inventory/group_vars/all.yml.
+
+- name: Create agent data directory
+  ansible.builtin.file:
+    path: "{{ beszel_agent_data_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ beszel_agent_data_dir }}/docker-compose.yml"
+    mode: "0600"
+
+- name: Start Beszel agent
+  ansible.builtin.shell:
+    cmd: docker compose up -d
+    chdir: "{{ beszel_agent_data_dir }}"
+  changed_when: true

@@ -1,0 +1,6 @@
+---
+- name: Deploy Beszel Hub
+  hosts: hub
+  roles:
+    - docker
+    - beszel_hub

@@ -1,0 +1,6 @@
+---
+- name: Deploy Beszel Agents
+  hosts: agents
+  roles:
+    - docker
+    - beszel_agent

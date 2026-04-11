@@ -1,0 +1,4 @@
+---
+beszel_agent_port: 45876
+beszel_agent_data_dir: /opt/beszel/agent
+beszel_agent_image: "henrygd/beszel-agent:latest"

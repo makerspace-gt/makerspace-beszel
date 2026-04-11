@@ -1,0 +1,4 @@
+---
+beszel_hub_port: 8090
+beszel_hub_data_dir: /opt/beszel/hub
+beszel_hub_image: "henrygd/beszel:latest"

@@ -1,0 +1,24 @@
+---
+all:
+  vars:
+    ansible_user: root
+    ansible_ssh_extra_args: "-4"
+  children:
+    hub:
+      hosts:
+        proxmox-laptop:
+          ansible_host: "{{ host_addresses['proxmox-laptop'] }}"
+    agents:
+      hosts:
+        koorax:
+          ansible_host: "{{ host_addresses['koorax'] }}"
+        kraemer:
+          ansible_host: "{{ host_addresses['kraemer'] }}"
+        server01:
+          ansible_host: "{{ host_addresses['server01'] }}"
+        zammad:
+          ansible_host: "{{ host_addresses['zammad'] }}"
+        unstable:
+          ansible_host: "{{ host_addresses['unstable'] }}"
+        forum:
+          ansible_host: "{{ host_addresses['forum'] }}"

@@ -1,0 +1,37 @@
+---
+- name: Create hub data directory
+  ansible.builtin.file:
+    path: "{{ beszel_hub_data_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ beszel_hub_data_dir }}/docker-compose.yml"
+    mode: "0600"
+
+- name: Start Beszel hub
+  ansible.builtin.shell:
+    cmd: docker compose up -d
+    chdir: "{{ beszel_hub_data_dir }}"
+  changed_when: true
+
+- name: Wait for hub to be healthy
+  ansible.builtin.uri:
+    url: "http://localhost:{{ beszel_hub_port }}/api/health"
+    method: GET
+    status_code: 200
+  register: hub_health
+  retries: 10
+  delay: 3
+  until: hub_health.status == 200
+
+- name: Print next steps
+  ansible.builtin.debug:
+    msg: >-
+      Hub is running at http://localhost:{{ beszel_hub_port }}.
+      Open the web UI, go to "Add System", and copy the public KEY.
+      Then set beszel_hub_key in inventory/group_vars/all.yaml
+      (ansible-vault edit inventory/group_vars/all.yaml)
+      before running the agent playbook.
