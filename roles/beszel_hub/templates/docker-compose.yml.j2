@@ -11,3 +11,19 @@ services:
     environment:
       USER_EMAIL: "{{ beszel_admin_email }}"
       USER_PASSWORD: "{{ beszel_admin_password }}"
+{% if beszel_signal_apprise_url is defined %}
+
+  # Signal bridge: Beszel can't speak Signal/Apprise directly (shoutrrr has no Signal
+  # service), so it posts to this apprise-api sidecar at http://apprise:{{ beszel_apprise_port }}/notify/{{ beszel_apprise_config_key }}.
+  apprise:
+    image: {{ beszel_apprise_image }}
+    container_name: beszel-apprise
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:{{ beszel_apprise_port }}:8000"
+    volumes:
+      - ./apprise_config:/config
+    environment:
+      APPRISE_STATEFUL_MODE: simple
+      APPRISE_WORKER_COUNT: 1
+{% endif %}

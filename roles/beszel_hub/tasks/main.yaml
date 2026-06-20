@@ -27,6 +27,28 @@
   delay: 3
   until: hub_health.status == 200
 
+- name: Wait for apprise-api to be ready
+  ansible.builtin.uri:
+    url: "http://localhost:{{ beszel_apprise_port }}/status"
+    method: GET
+    status_code: 200
+  register: apprise_status
+  retries: 10
+  delay: 3
+  until: apprise_status.status == 200
+  when: beszel_signal_apprise_url is defined
+
+- name: Register Signal channel in apprise-api
+  ansible.builtin.uri:
+    url: "http://localhost:{{ beszel_apprise_port }}/add/{{ beszel_apprise_config_key }}"
+    method: POST
+    body_format: form-urlencoded
+    body:
+      urls: "{{ beszel_signal_apprise_url }}"
+    status_code: 200
+  changed_when: true
+  when: beszel_signal_apprise_url is defined
+
 - name: Print next steps
   ansible.builtin.debug:
     msg: >-

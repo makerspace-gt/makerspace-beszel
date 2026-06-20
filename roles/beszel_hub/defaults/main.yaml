@@ -2,3 +2,10 @@
 beszel_hub_port: 8090
 beszel_hub_data_dir: /opt/beszel/hub
 beszel_hub_image: "henrygd/beszel:latest"
+
+# apprise-api sidecar: only deployed when beszel_signal_apprise_url is defined.
+# Bridges Beszel (shoutrrr generic webhook) -> Apprise -> Signal.
+beszel_apprise_image: "caronc/apprise:latest"
+beszel_apprise_port: 8000
+# Config key registered in apprise-api; Beszel notifies it at /notify/<key>.
+beszel_apprise_config_key: beszel
