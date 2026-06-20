@@ -103,5 +103,17 @@ traefik basic-auth). It lives only in apprise-api's config, never in Beszel.
 
 ## Secrets
 
-All secrets, IPs, and Tailscale addresses live in `inventory/group_vars/all.yaml` (vault-encrypted).
-Never commit unencrypted secrets — `detect-secrets` and a pre-commit hook enforce this.
+**Put every secret in `inventory/group_vars/all.yaml`** — the single ansible-vault-encrypted file
+(passwords, the hub SSH key, notification URLs, host addresses, Tailscale IPs). Edit it with
+`ansible-vault edit inventory/group_vars/all.yaml`; reference its values from elsewhere (e.g.
+`hosts.yaml` uses `{{ host_addresses[...] }}`) rather than copying secrets into other files.
+
+This repo is **public**, so two hooks guard it:
+
+- A `pre-commit` **and** `pre-push` hook refuses to commit/push `all.yaml` unless it is
+  ansible-vault encrypted (`scripts/check-vault-encrypted.sh`).
+- `detect-secrets` scans for stray credentials in any other file.
+
+The encryption check matches `all.yaml` **by path**, so keeping all secrets in that one file is what
+keeps the guard effective — a secret placed in some *other* new file is only caught by
+`detect-secrets` (pattern-based, not guaranteed). No hook catches everything: when in doubt, encrypt.
