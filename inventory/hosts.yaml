@@ -9,6 +9,7 @@ all:
         uptime-pi:
           ansible_host: "{{ host_addresses['uptime-pi'] }}"
           ansible_user: pi
+          beszel_app_url: "https://uptime-pi.zebra-alewife.ts.net:8443"
     agents:
       hosts:
         koorax:

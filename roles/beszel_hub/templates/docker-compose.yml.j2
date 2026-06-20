@@ -11,6 +11,7 @@ services:
     environment:
       USER_EMAIL: "{{ beszel_admin_email }}"
       USER_PASSWORD: "{{ beszel_admin_password }}"
+      APP_URL: "{{ beszel_app_url }}"
 {% if beszel_signal_apprise_url is defined %}
 
   # Signal bridge: Beszel can't speak Signal/Apprise directly (shoutrrr has no Signal

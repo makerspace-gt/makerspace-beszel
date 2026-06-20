@@ -3,6 +3,10 @@ beszel_hub_port: 8090
 beszel_hub_data_dir: /opt/beszel/hub
 beszel_hub_image: "henrygd/beszel:latest"
 
+# Public hub URL used for links in notifications and emails (Beszel APP_URL env var).
+# Override per host in the inventory; defaults to localhost.
+beszel_app_url: "http://localhost:{{ beszel_hub_port }}"
+
 # apprise-api sidecar: only deployed when beszel_signal_apprise_url is defined.
 # Bridges Beszel (shoutrrr generic webhook) -> Apprise -> Signal.
 beszel_apprise_image: "caronc/apprise:latest"
