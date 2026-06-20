@@ -8,12 +8,28 @@ Ansible playbooks to deploy [Beszel](https://github.com/henrygd/beszel) monitori
 - **Agents**: Lightweight containers on Debian/Ubuntu VMs, listening on port 45876
 - **Connection**: Hub SSHs into agents (not the other way around)
 
-## Prerequisites
+## Setup
 
-- Ansible
+Install Ansible and pre-commit:
+
+```bash
+# Arch Linux
+sudo pacman -S --needed ansible pre-commit
+
+# Debian / Ubuntu
+sudo apt update && sudo apt install -y ansible pre-commit
+```
+
+Then enable the git hooks (secret detection + YAML linting):
+
+```bash
+pre-commit install
+```
+
+You also need:
+
 - `ansible-vault` password in `.vault_pass`
 - SSH access (as root) to all target hosts
-- Use the devcontainer!
 
 ## Deployment
 
@@ -50,5 +66,4 @@ ansible-playbook playbooks/deploy-agents.yaml
 ## Secrets
 
 All secrets, IPs, and Tailscale addresses live in `inventory/group_vars/all.yaml` (vault-encrypted).
-Use the devcontainer!
 Never commit unencrypted secrets — `detect-secrets` and a pre-commit hook enforce this.
