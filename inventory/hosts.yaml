@@ -6,8 +6,9 @@ all:
   children:
     hub:
       hosts:
-        proxmox-laptop:
-          ansible_host: "{{ host_addresses['proxmox-laptop'] }}"
+        uptime-pi:
+          ansible_host: "{{ host_addresses['uptime-pi'] }}"
+          ansible_user: pi
     agents:
       hosts:
         koorax:
@@ -16,9 +17,11 @@ all:
           ansible_host: "{{ host_addresses['kraemer'] }}"
         server01:
           ansible_host: "{{ host_addresses['server01'] }}"
-        zammad:
-          ansible_host: "{{ host_addresses['zammad'] }}"
         unstable:
           ansible_host: "{{ host_addresses['unstable'] }}"
         forum:
           ansible_host: "{{ host_addresses['forum'] }}"
+        spof:
+          ansible_host: "{{ host_addresses['spof'] }}"
+        unseven:
+          ansible_host: "{{ host_addresses['unseven'] }}"
