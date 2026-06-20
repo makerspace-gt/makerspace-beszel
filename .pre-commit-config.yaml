@@ -24,3 +24,13 @@ repos:
     hooks:
       - id: yamllint
         args: ["-c", ".yamllint"]
+
+  # Ensure ansible-vault files are never committed/pushed unencrypted (public repo!)
+  - repo: local
+    hooks:
+      - id: check-vault-encrypted
+        name: Ensure ansible-vault files are encrypted
+        entry: scripts/check-vault-encrypted.sh
+        language: script
+        files: ^inventory/group_vars/all\.yaml$
+        stages: [pre-commit, pre-push]

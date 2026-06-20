@@ -20,10 +20,11 @@ sudo pacman -S --needed ansible pre-commit
 sudo apt update && sudo apt install -y ansible pre-commit
 ```
 
-Then enable the git hooks (secret detection + YAML linting):
+Then enable the git hooks (secret detection, YAML linting, and a guard that refuses to
+commit/push an unencrypted vault — this repo is public):
 
 ```bash
-pre-commit install
+pre-commit install --hook-type pre-commit --hook-type pre-push
 ```
 
 You also need:
