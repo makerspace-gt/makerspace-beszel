@@ -12,6 +12,14 @@ services:
       USER_EMAIL: "{{ beszel_admin_email }}"
       USER_PASSWORD: "{{ beszel_admin_password }}"
       APP_URL: "{{ beszel_app_url }}"
+    # scratch-based image: no shell/curl, so use beszel's built-in `health` command.
+    # 8090 is the container-internal port (not beszel_hub_port, which is host-side).
+    healthcheck:
+      test: ["CMD", "/beszel", "health", "--url", "http://localhost:8090"]
+      start_period: 5s
+      interval: 120s
+      timeout: 5s
+      retries: 3
 {% if beszel_signal_apprise_url is defined %}
 
   # Signal bridge: Beszel can't speak Signal/Apprise directly (shoutrrr has no Signal
@@ -27,4 +35,12 @@ services:
     environment:
       APPRISE_STATEFUL_MODE: simple
       APPRISE_WORKER_COUNT: 1
+    # Unlike the beszel images, this one ships a shell + curl and has no built-in
+    # HEALTHCHECK, so hit its /status endpoint (200 = OK) directly.
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/status"]
+      interval: 120s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 {% endif %}

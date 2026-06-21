@@ -11,3 +11,11 @@ services:
     environment:
       LISTEN: "{{ beszel_agent_port }}"
       KEY: "{{ beszel_hub_key }}"
+    # scratch-based image: no shell/curl, so use the agent's built-in `health` command.
+    # Verifies the agent process is healthy locally (not that it's reachable from the hub).
+    healthcheck:
+      test: ["CMD", "/agent", "health"]
+      interval: 120s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
