@@ -71,6 +71,14 @@ UI (**Settings → Notifications**); the alerts themselves (status/down, CPU, me
 enabled per system. The notification URLs are recorded in the vault (`beszel_notify_*`,
 `beszel_signal_apprise_url`) so they are not lost.
 
+### Email
+
+Not a shoutrrr service — Beszel's built-in email uses the PocketBase SMTP server. Log in to
+PocketBase at `<hub>/_/` (superuser = `beszel_admin_email` / `beszel_admin_password`; reset with
+`docker exec beszel /beszel superuser upsert <email> <password>`), go to **Settings → Mail**,
+enable the SMTP server, and send a test email. Then toggle **Email** on per-system alerts; mail is
+sent to each user's account email. SMTP creds live in PocketBase's DB, not the vault.
+
 ### Discord
 
 Supported natively by shoutrrr. Convert a Discord webhook
@@ -80,7 +88,11 @@ Supported natively by shoutrrr. Convert a Discord webhook
 discord://<token>@<id>
 ```
 
-### Signal (via apprise-api sidecar)
+### Signal (via apprise-api sidecar) — currently disabled
+
+The `generic://` URL has been removed from **Settings → Notifications**, so no Signal alerts are
+sent. The **apprise-api** sidecar is still deployed while `beszel_signal_apprise_url` is set in the
+vault; unset it to drop the sidecar. To re-enable, re-add the URL below in the UI.
 
 shoutrrr has no Signal service, so the hub role runs an **apprise-api** sidecar — deployed only
 when `beszel_signal_apprise_url` is set in the vault. `deploy-hub.yaml` starts it next to the hub
